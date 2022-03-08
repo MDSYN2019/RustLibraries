@@ -3,10 +3,19 @@
 Last Updated: 07/03/2022
 ------------------------
 
+Memory and Allocation
+
+We can't put a blob of memory into the binary for each piece of text whose size is unknown at compile time 
+and whose size might change while running the program 
+
+
+
+
+
 */
 
-use std::path::PathBuf;
-use structopt::StructOpt;
+//use std::path::PathBuf;
+//use structopt::StructOpt;
 
 struct User {
     active: bool,
@@ -22,7 +31,7 @@ fn main() {
 	email: String::from("something@example.com"),
 	username: String::from("someuser123"),
 	active: true,
-	sign_in_cout: 1, 
+	sign_in_count: 1, 
     };
 
     /*
@@ -44,6 +53,12 @@ fn main() {
     let mut s = String::from("hello");
     s.push_str(", world"); // push_str() appends a literal to a string
     println!("{}", s); 
+
+    let s1 = String::from("hello");
+    let s2 = s1.clone(); // now we have a deep copy of the initial variable
+    
+    println!("{}", s1);
+
 }
 
 /* 
@@ -60,3 +75,10 @@ fn take_ownership(some_string: String) {
     println!("{}", some_string);
 }
 
+fn makes_copy(some_integer: i32) {
+    println!("{}", some_integer);
+}
+
+fn do_something(process_id: u64) -> Option<()> {
+
+}
