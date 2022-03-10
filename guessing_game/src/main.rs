@@ -1,6 +1,6 @@
 /*
 
-Last Updated: 08/03/2022
+Last Updated: 10/03/2022
 ------------------------
 
 Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
@@ -59,6 +59,15 @@ These features, sometimes collectively referred to as the module system, include
 
 */
 
+
+use rand::Rng;
+use std::cmp::Ordering;
+use std::io;
+//use std::env;
+use std::fs;
+use std::collections::HashMap;
+
+// Struct definitions
 struct User {
     active: bool,
     username: String,
@@ -66,15 +75,78 @@ struct User {
     sign_in_count: u64,
 }
 
+struct Rectangle {
+    width: u32,
+    height: u32, 
+}
 
-use rand::Rng;
-use std::cmp::Ordering;
-use std::io;
-//use std::env;
-use std::fs;
+// enum definitions
+enum SpreadsheetCell {
+    Int(i32),
+    Float(f64),
+    Text(String),
+}
+
+fn printLoop(value: &Vec<i32>) {
+    let valueClone = value.clone();
+    for i in &valueClone {
+	println!("{} \n", i)
+    }   
+}
+
+fn print_labeled_measurement(value: i32, unit_label: char) {
+    println!("The measurement is {}{}", value unit_label);
+}
+
+
+// https://doc.rust-lang.org/book/ch10-01-syntax.html
+
+fn largest_i32(list: &[i32]) -> i32 {
+    let mut largest = list[0];
+
+    for &item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn largest_char(list: &[char]) -> char {
+    let mut largest = list[0];
+
+    for &item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
 
 fn main() {
 
+    let width1 = 30;
+    let height1 = 50;
+
+    println!(
+	"The area of the rectangle is {} square pixels",
+	area(width1, height1)
+	);
+    
+    let mut v: Vec<i32> = Vec::new();
+    v.push(5);
+    v.push(6);
+    v.push(7);
+    v.push(8);
+
+    printLoop(&v);
+    
+    //for i in &v {
+    //	println!("{}", i);
+    //}
+    
     let user1 = User {
 	email: String::from("sangyoung123@googlemail.com"),
 	username: String::from("something"),
@@ -85,7 +157,7 @@ fn main() {
     println!("Guess the number");
     let secret_number = rand::thread_rng().gen_range(1..101);
     println!("The secret number is: {}", secret_number);
-
+    
     // Result's variants are Ok or Err. The ok variant indicates the operation was successful,
     // and inside ok is the successfully generated value. The Err variant means the operation
     // failed, and Err contains information about how or why the operation failed
@@ -200,18 +272,18 @@ fn main() {
 
     
     // read filename 
-   
     let filename = String::from("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt");
     let filename2 = filename.clone();
     //    let contents = fs::read_to_string(filename)
     //.expect("Something went wrong reading the file");
     let contents = include_str!("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt")
 	.split("\n");
+
     let contents2 = contents.clone();
+
     //println!("With text {}", contents);
     let vec = contents2.collect::<Vec<&str>>(); // convert the split string to a vector
     
-
     for elements in vec.iter() {
 	println!("{}", elements);
     }
@@ -221,7 +293,14 @@ fn main() {
 	println!("{}", entry);
     }
 
-}
+    let row = vec![
+	SpreadsheetCell::Int(3),
+	SpreadsheetCell::Text(String::from("blue")),
+	SpreadsheetCell::Float(10.12),
+    ];
+    
+}    
+
 
 
 /*
