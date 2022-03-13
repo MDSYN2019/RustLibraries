@@ -43,8 +43,6 @@ pub mod back_of_house {
     The T and E are generic type parameters: we'll discuss generics in more detail. What you need to know
     is that T represents the type of the value that will be returned in a success case within the Ok variant,
     and E represents the type of the error that will be returned in a failure case within the Err variant 
-
-    
     */
     
     pub struct AveragedCollection {
@@ -66,6 +64,11 @@ pub mod back_of_house {
 	//pub fn read(&self) {
 	//    self.File::open(self.filename);
 	//}
+
+	pub fn printVec(&self) {
+	    
+	}
+
 	
 	pub fn add(&mut self, value: i32) {
 	    self.list.push(value);

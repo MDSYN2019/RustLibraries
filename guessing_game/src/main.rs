@@ -1,6 +1,9 @@
 /*
+----------------------
 Author: Sang Young Noh
------------------------
+----------------------
+
+------------------------
 Last Updated: 13/03/2022
 ------------------------
 
@@ -129,6 +132,7 @@ fn HashMapRelatedFunction(value: &mut HashMap<String, i32>) {
     hashmap with the function. 
     
     */
+
     value.insert(String::from("Blue"), 10);
     value.insert(String::from("Yellow"), 50);
 
@@ -185,7 +189,6 @@ impl<'a> Iterator for LinesWithEndings<'a> {
         Some(line)
     }
 }
-// ---
 
 fn main() {
     
@@ -288,18 +291,29 @@ fn main() {
 
     // Working on the advent of code
     // Our task is to find the two entries that sum to 2020
-
-    
-    // read filename 
+    // read filename    
     let filename = String::from("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt");
-    //filename.what_is_this();
     let filename2 = filename.clone();
-    //    let contents = fs::read_to_string(filename)
-    //.expect("Something went wrong reading the file");
+
+    let f = File::open(filename2);    
+    let f = match f {
+	Ok(file) => file,
+	Err(error) => match error.kind() { // Depending on the type of error, return different things
+	    ErrorKind::NotFound => match File::create(filename) { 
+		Ok(fc) => fc,
+		Err(e) => panic!("Problem creating the file {:?}", e),
+	    },
+	    other_error => {
+		panic!("Problem opening the file: {:?}", other_error) 
+	    }
+	},
+
+    };
     let contents = include_str!("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt")
 	.split("\n");
 
     /*
+    
     This tells us the return type of the File::open function is a Result<T,E>. The generic parameter 
     T has been filled in here with the type of the success value 
 
@@ -307,17 +321,16 @@ fn main() {
 
     The File::open function needs to have a way to tell us whether it succeeded or failed and 
     at the same time give us either the file handle or error information
-    */
+    
+     */
 
     
     let contents2 = contents.clone();
     //println!("With text {}", contents);
     let vec = contents2.collect::<Vec<&str>>(); // convert the split string to a vector
-    
     for elements in vec.iter() {
 	println!("{}", elements);
-    }
-    
+    }    
     // https://doc.rust-lang.org/rust-by-example/flow_control/for.html
     for entry in contents {
 	println!("{}", entry);
