@@ -1,10 +1,11 @@
 /*
-
-Last Updated: 10/03/2022
+Author: Sang Young Noh
+-----------------------
+Last Updated: 13/03/2022
 ------------------------
 
 Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
-their absence 
+their absence. 
 
 Useful Links:
 ------------
@@ -21,51 +22,58 @@ Useful Links:
 
 -> https://stevedonovan.github.io/rust-gentle-intro/object-orientation.html  - object orientation in Rust 
 
-
 -> https://os.phil-opp.com/ - building an OS in rust 
 
---
+-> https://doc.rust-lang.org/book/ch09-00-error-handling.html - error handling in rust 
 
-As a project grows, you can organize code by splitting it into multiple modules and then 
-multiple files. A package can contain multiple binary crates and optionally one library crate. 
-As a package grows, you can extract parts into separate crates that become external 
-dependencies. 
+-> https://blog.logrocket.com/how-to-build-a-blockchain-in-rust/ - blockchain app in rust 
 
+*/
 
-In addition to grouping functionality, encapsulating implementation details lets you 
-reuse code at a higher level; once you've implemented an operation, other code can 
-call that code via the code's public interface without knowing how the implementation works
+/*
 
-A related concept is scope; the nested context in which code is written has a set of names 
-that are defined as 'in scope'. When reading, writing and compiling code, programmers and compilers
-need to know whether a particular name at a particular spot refers to:
+The code will panic! no matter why File::open failed. What we want to do instead is take different actions 
+for different actions for different failure reasons: 
 
-- variable
-- struct 
-- enum 
-- module 
-- constant 
+if File::open failed because the file doesn't exist, we want to create the file 
+and return the handle to the new file. 
 
-
-Rust has a number of features that allow you to manage your code's organization, including which
-details are exposed, which details are private, and what names are in each scope in your programs. 
-These features, sometimes collectively referred to as the module system, include:
-
-- packages
-- crates
-- Modules
-- Paths 
-
+If File::open failed for any other reason - for example, because we didn't have permission to open the file 
+- we still want to code to panic! in the same way as it did. 
 
 */
 
 
-use rand::Rng;
-use std::cmp::Ordering;
-use std::io;
-//use std::env;
+/*
+
+How to write tests
+------------------
+
+Tests are Rust functions that verify that the non-test code is functioning in the expected manner. 
+The bodies of test functions typically perform these three actions 
+
+1. Set up any needed data or state.
+
+2. Run the code you want to test. 
+
+3. Assert the results are what you expect. 
+
+*/
+
+
 use std::fs;
+use std::fs::File;
+use std::io::ErrorKind; 
+
+use std::io::prelude::*;
 use std::collections::HashMap;
+use std::cmp::Ordering;
+
+use std::io;
+use rand; 
+use rand::Rng;
+// importing back_of_house module::AveragedCollection
+use guessing_game::back_of_house::AveragedCollection;
 
 // Struct definitions
 struct User {
@@ -81,10 +89,28 @@ struct Rectangle {
 }
 
 // enum definitions
+
+/*
+Enums are a way of defining custom data types in a different way than you do with structs. Let's look 
+at a situation we might want to express in code. 
+
+Any ip address can be either a version four or version six address, but not both at the same time. That property
+of IP addresses makes the enum data structure appropriate, because an enum value can only be one of its variants. Both version four and 
+version six addresses are still fundamentally IP addresses, so they should be treated as the same type 
+when the code  
+*/
+
 enum SpreadsheetCell {
     Int(i32),
     Float(f64),
     Text(String),
+    
+}
+
+struct IntegerAdder {
+    kind: SpreadsheetCell,
+    address: String,
+    numlist: Vec<i32>, 
 }
 
 fn printLoop(value: &Vec<i32>) {
@@ -94,23 +120,31 @@ fn printLoop(value: &Vec<i32>) {
     }   
 }
 
-fn print_labeled_measurement(value: i32, unit_label: char) {
-    println!("The measurement is {}{}", value unit_label);
+fn HashMapRelatedFunction(value: &mut HashMap<String, i32>) {
+    /*
+
+    Description
+    -----------
+    From the mutable hashmap, insert the <string, int> entry into the 
+    hashmap with the function. 
+    
+    */
+    value.insert(String::from("Blue"), 10);
+    value.insert(String::from("Yellow"), 50);
+
+    // what other transformations do I wish to do with the hashmap?
 }
 
-
 // https://doc.rust-lang.org/book/ch10-01-syntax.html
-
 fn largest_i32(list: &[i32]) -> i32 {
-    let mut largest = list[0];
+    let mut largest = list[0]; // Take the first item in the mutable list 
 
-    for &item in list {
+    for &item in list { // loop over the list 
         if item > largest {
-            largest = item;
+            largest = item; // if the item is larger than the previously allocated largest value, then we allocate that value as the largest value 
         }
     }
-
-    largest
+    largest // return largest 
 }
 
 fn largest_char(list: &[char]) -> char {
@@ -125,28 +159,71 @@ fn largest_char(list: &[char]) -> char {
     largest
 }
 
+pub struct LinesWithEndings<'a> {
+    input: &'a str,
+}
+
+impl<'a> LinesWithEndings<'a> {
+    pub fn from(input: &'a str) -> LinesWithEndings<'a> {
+        LinesWithEndings {
+            input: input,
+        }
+    }
+}
+
+impl<'a> Iterator for LinesWithEndings<'a> {
+    type Item = &'a str;
+
+    #[inline]
+    fn next(&mut self) -> Option<&'a str> {
+        if self.input.is_empty() {
+            return None;
+        }
+        let split = self.input.find('\n').map(|i| i + 1).unwrap_or(self.input.len());
+        let (line, rest) = self.input.split_at(split);
+        self.input = rest;
+        Some(line)
+    }
+}
+// ---
+
 fn main() {
-
-    let width1 = 30;
-    let height1 = 50;
-
-    println!(
-	"The area of the rectangle is {} square pixels",
-	area(width1, height1)
-	);
     
+    //panic!("crash and burn");
+    // Using structs
+    // Hashmaps    
+    let user1 = User {
+	email: String::from("sangyoung123@googlemail.com"),
+	username: String::from("something"),
+	active: true,
+	sign_in_count: 1, 
+    };
+    
+    /*
+    You can create an empty hash map with new and add elements with insert.
+    */
+    
+    // let mut scores = HashMap::new();
+    let mut scores: HashMap<String, i32> = HashMap::new();
+    HashMapRelatedFunction(&mut scores); // Adding in values into the hashmaps
+    for (key, value) in &scores {
+        println!("{}: {}", key, value);
+    }
+
     let mut v: Vec<i32> = Vec::new();
+    // Adding elements to the vector 
     v.push(5);
     v.push(6);
     v.push(7);
     v.push(8);
-
     printLoop(&v);
+    v[99];
     
-    //for i in &v {
-    //	println!("{}", i);
-    //}
-    
+    let AveragedCollection1 = AveragedCollection {
+	list: v.clone(),
+	average: 0.0 
+    };
+
     let user1 = User {
 	email: String::from("sangyoung123@googlemail.com"),
 	username: String::from("something"),
@@ -158,66 +235,6 @@ fn main() {
     let secret_number = rand::thread_rng().gen_range(1..101);
     println!("The secret number is: {}", secret_number);
     
-    // Result's variants are Ok or Err. The ok variant indicates the operation was successful,
-    // and inside ok is the successfully generated value. The Err variant means the operation
-    // failed, and Err contains information about how or why the operation failed
-
-    // Generating a secret number
-
-    /*
-
-    Next, we need to generate a secret number that the user will try to guess. The secret
-    number should be different every time so the game is fun to play more than once.
-
-    We'll use a random number between 1 and 100 so the game isn't too difficult. Rust doesn't yet
-    include a random number functionality in its standard library. However, Rust does provide
-    a rand crate with said functionality.
-
-    ---
-
-    Cargo's coordination of external crates is where Cargo really shines. Before we can write
-    code that uses rand, we need to modify the Cargo.toml file to include the rand crate
-    as a dependency. Open the file now and add the following line to the bottom
-    beneath the [dependencies] section header that Cargo created for you.
-
-    ---
-
-    Cargo has a mechanism that ensures that you can build the same artifact every time you
-    or anyone else builds your code: Cargo will use only the versions of the dependencies
-    you specified until you indicate otherwise.
-
-    When you build a project for the first time, Cargo figures out all the versions of the
-    dependencies that fit the criteria and then writes
-
-
-     */
-
-    /*
-
-    Comparing the Guess to the Secret number
-    ---------------------------------------
-
-    Now that we have user input and a random number, we can compare them. That step is shown
-    below
-
-     */
-
-    // matching the guess
-
-    // shadowing lets us reuse the guess variable name rather than forcing us to create
-    // two unique variables, such as guess_str and guess for example .
-
-    // We bind this new variable to the expression guess.trim().parse(). The guess
-    // in the expression refers to the original variable that contained the input
-    // as the string
-
-    // The trim method on a String instance will eliminate any whitespace at the beginning
-    // and end, which we must do to be able to compare the string to the u32, which can only
-    // contain numerical data.
-
-    // The parse method will only work on characters that can logically be converted
-    // into numbers so can easily cause errors.
-
     /*
 
     Handling Invalid Input
@@ -230,9 +247,11 @@ fn main() {
     */
 
     loop {
-        println!("Please input your guess");
+
+	println!("Please input your guess");
         let mut guess = String::new(); // Rust has a strong, static type system.
-        /*
+
+	/*
         However, it also has type inference. When we write
 
         let mut guess = String::new(), Rust was able to infer that guess should be a string
@@ -243,8 +262,8 @@ fn main() {
         - u32, an unsigned 32-bit number
         - i64, a 64-bit number
 
-         */
-
+        */
+	
         io::stdin()
             .read_line(&mut guess)
             .expect("Failed to read line"); // handling potential failure with the result type
@@ -273,14 +292,25 @@ fn main() {
     
     // read filename 
     let filename = String::from("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt");
+    //filename.what_is_this();
     let filename2 = filename.clone();
     //    let contents = fs::read_to_string(filename)
     //.expect("Something went wrong reading the file");
     let contents = include_str!("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt")
 	.split("\n");
 
-    let contents2 = contents.clone();
+    /*
+    This tells us the return type of the File::open function is a Result<T,E>. The generic parameter 
+    T has been filled in here with the type of the success value 
 
+    This return type means the call to File::open might succeed and return a file handle read from or write to.
+
+    The File::open function needs to have a way to tell us whether it succeeded or failed and 
+    at the same time give us either the file handle or error information
+    */
+
+    
+    let contents2 = contents.clone();
     //println!("With text {}", contents);
     let vec = contents2.collect::<Vec<&str>>(); // convert the split string to a vector
     
@@ -292,7 +322,6 @@ fn main() {
     for entry in contents {
 	println!("{}", entry);
     }
-
     let row = vec![
 	SpreadsheetCell::Int(3),
 	SpreadsheetCell::Text(String::from("blue")),
@@ -303,54 +332,3 @@ fn main() {
 
 
 
-/*
-
-How to write tests
-------------------
-
-Tests are Rust functions that verify that the non-test code is functioning in the expected manner. 
-The bodies of test functions typically perform these three actions 
-
-1. Set up any needed data or state.
-
-2. Run the code you want to test. 
-
-3. Assert the results are what you expect. 
-
-
-
- */
-
-
-/*
-/// Iterator yielding every line in a string. The line includes newline character(s).
-pub struct LinesWithEndings<'a> {
-    input: &'a str,
-}
-
-impl<'a> LinesWithEndings<'a> {
-    pub fn from(input: &'a str) -> LinesWithEndings<'a> {
-        LinesWithEndings {
-            input: input,
-        }
-    }
-}
-
-impl<'a> Iterator for LinesWithEndings<'a> {
-    type Item = &'a str;
-
-    #[inline]
-    fn next(&mut self) -> Option<&'a str> {
-        if self.input.is_empty() {
-            return None;
-        }
-        let split = self.input.find('\n').map(|i| i + 1).unwrap_or(self.input.len());
-        let (line, rest) = self.input.split_at(split);
-        self.input = rest;
-        Some(line)
-    }
-}
- */
-
-//fn parse(input: &str) {
-//}

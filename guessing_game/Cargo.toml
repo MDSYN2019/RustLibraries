@@ -7,4 +7,19 @@ edition = "2021"
 
 [dependencies]
 
+syn = "1.0"
 rand = "0.8.3"
+quote = "1.0"
+chrono = "0.4"
+sha2 = "0.9.8"
+serde = {version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# When a panic occurs, the program starts unwinding, which means Rust
+# walks back up the stack and cleans up the data from each function.
+
+#[profile.release]
+#panic = 'abort'
+
+
+

@@ -1,93 +1,94 @@
 
 mod front_of_house;
-/*
 
-Defining Modules to Control Scope and Privacy 
----------------------------------------------
-
-We'll talk about modules and other parts of the module system, namely paths that 
-allow you to name items; the use keyword that brings a path into scope.
-
-Modules let us organize code within a crate into groups for readability and easy reuse. Modules also control
-the privacy of items, which is whether an item can be used by outside code (public) or is an internal implmentation 
-detail 
-
---
-
-We define a module by starting with the mod keyword and then specify the name of the module 
-and place curly brackets around the body of the module. Inside modules, we can have other modules, 
-as in this case with the modules hosting and serving 
-
-By using modules, we can group related definitions together and name why they're related. 
-Programmers using this code would have an easier time finding definitons they wanted to use 
-because they could navigate the code based on the groups rather than having to read through 
-all the definitions.
-
-
-*/
-
-
-// Paths for referring to an item in the module tree - to show rust where to find an item
-// in a module tree, we use a path in the same way we use a path when navigating a filesystem.
-
-// If we want to call a function, we need to know its path.
+fn serve_order() {}
 
 /*
+Error Handling
+--------------
 
-Choosing whether to use a relative or absolute path is a decision you'll make based on your
-project. The decision should depend on whether you're more likely to move item defintiion 
-code separately from or together with the code that uses the item. 
 
-In the absolute path, we start with crate, the root of our crate's module tree. Then the 
-front_of_house module is defined in the crate root. The front_of_house module isn't public
+Rust's commitment to reliability to error handling. Errors are a fact of life 
+in software, so Rust has a number of features for handling situations in which 
+sometimes goes wrong. In many cases, Rust requires you to acknowledge the possibility of an error 
+and take some action before your code will compile.
+
+This requirement makes your program more robust by ensuring that you'll 
+discover errors and handle them appriately before you've deployed your code to production!
+
+---
+
+Rust groups errors into two major categories: recoverable and unrecoverable errors. For a 
+recoverable error, such as file not found, its reasonable to report the problem 
+to the user and retry the operation. Unrecoverable errors are always symptoms of bugs, 
+like trying to access a location beyond the end of an array 
+
+Most languages dont distinguish between these two kinds of errors and handle both 
+in the same way, using mechanisms such as exceptions 
+
+
+--- 
+
+Most languages don't distinguish between these two kind of errors and handle both in the same 
+way, using mechanisms such as exceptions. 
 
  */
 
 
-/*
-https://doc.rust-lang.org/book/ch07-05-separating-modules-into-different-files.html
+pub mod back_of_house {
+    
+    // Private enum inside the module 
 
-Separating Modules into Different files
----------------------------------------
+    /*
+    The T and E are generic type parameters: we'll discuss generics in more detail. What you need to know
+    is that T represents the type of the value that will be returned in a success case within the Ok variant,
+    and E represents the type of the error that will be returned in a failure case within the Err variant 
 
-So far, all the examples in this chapter defined multiple modules in one file. When modules get large, you might want to 
-move their definitions to a separate file to make the code easier to navigate.
+    
+    */
+    
+    pub struct AveragedCollection {
+	pub list: Vec<i32>,
+	pub average: f32,
+	//pub filename: String, 
+    }
 
+ 
+    // The struct itself is marked pub so that other code may use it,
+    // but the fields within the struct remain private.
 
+    // We want to ensure that whenever a value is added or removed from the list,
+    // the average is also updated
 
-*/
-enum IpAddrKind {
-    V4,
-    V6, 
-}
+    impl AveragedCollection {
+	// Add - call upon the mutable self, and push value into the list
 
-/*
+	//pub fn read(&self) {
+	//    self.File::open(self.filename);
+	//}
+	
+	pub fn add(&mut self, value: i32) {
+	    self.list.push(value);
+	    self.update_average();
+	}
 
-Starting relative paths with super 
-----------------------------------
-
-We can also construct relative paths that begin in the parent module 
-by using super at the start of the path. 
-
-*/
-
-// impl - https://doc.rust-lang.org/std/keyword.impl.html
-
-// The impl keyword is primarily used to define implemntation on types. Inherent
-// implementations are standalone, while trait implmentations are used to implmentation trait
-// for types, or other trait 
-
-
-fn serve_order() {}
-
-mod back_of_house {
-
+	pub fn average(&self) -> f32 {
+	    self.average
+	}
+	
+	fn update_average(&mut self) {
+	    let total: i32 = self.list.iter().sum();
+	    self.average = total as f32 / self.list.len() as f32;
+	}
+    
+    }
+    
     pub struct Breakfast {
 	pub toast: String,
 	seasonal_fruit: String, 
     }
 
-    // impl on breakfast
+    // impl on breakfast 
 
     impl Breakfast {
 	pub fn summer(toast: &str) -> Breakfast {
