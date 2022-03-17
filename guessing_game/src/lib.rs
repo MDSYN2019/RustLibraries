@@ -1,56 +1,20 @@
 
-mod front_of_house;
-
-fn serve_order() {}
-
 /*
-Error Handling
---------------
 
+Last Updated: 13/03/2022
+-------------------------
 
-Rust's commitment to reliability to error handling. Errors are a fact of life 
-in software, so Rust has a number of features for handling situations in which 
-sometimes goes wrong. In many cases, Rust requires you to acknowledge the possibility of an error 
-and take some action before your code will compile.
+Other crates that depend on the aggregator crate can also bring the Summary trait into scope to implement the trait on their own types.
 
-This requirement makes your program more robust by ensuring that you'll 
-discover errors and handle them appriately before you've deployed your code to production!
-
----
-
-Rust groups errors into two major categories: recoverable and unrecoverable errors. For a 
-recoverable error, such as file not found, its reasonable to report the problem 
-to the user and retry the operation. Unrecoverable errors are always symptoms of bugs, 
-like trying to access a location beyond the end of an array 
-
-Most languages dont distinguish between these two kinds of errors and handle both 
-in the same way, using mechanisms such as exceptions 
-
-
---- 
-
-Most languages don't distinguish between these two kind of errors and handle both in the same 
-way, using mechanisms such as exceptions. 
-
- */
-
+*/
 
 pub mod back_of_house {
-    
-    // Private enum inside the module 
-
-    /*
-    The T and E are generic type parameters: we'll discuss generics in more detail. What you need to know
-    is that T represents the type of the value that will be returned in a success case within the Ok variant,
-    and E represents the type of the error that will be returned in a failure case within the Err variant 
-    */
     
     pub struct AveragedCollection {
 	pub list: Vec<i32>,
 	pub average: f32,
 	//pub filename: String, 
     }
-
  
     // The struct itself is marked pub so that other code may use it,
     // but the fields within the struct remain private.
@@ -59,17 +23,7 @@ pub mod back_of_house {
     // the average is also updated
 
     impl AveragedCollection {
-	// Add - call upon the mutable self, and push value into the list
 
-	//pub fn read(&self) {
-	//    self.File::open(self.filename);
-	//}
-
-	pub fn printVec(&self) {
-	    
-	}
-
-	
 	pub fn add(&mut self, value: i32) {
 	    self.list.push(value);
 	    self.update_average();
@@ -123,7 +77,7 @@ pub mod back_of_house {
     
     fn fix_incorrect_order() {
 	cook_order();
-	super::serve_order();
+	//super::serve_order();
     }
 
     fn cook_order() {}

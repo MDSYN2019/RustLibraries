@@ -10,6 +10,11 @@ Last Updated: 13/03/2022
 Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
 their absence. 
 
+Rosetta Stone code - http://rosettacode.org/wiki/Rosetta_Code
+
+- Rosetta stone tasks not implemented in rust - http://rosettacode.org/wiki/Reports:Tasks_not_implemented_in_Rust
+
+
 Useful Links:
 ------------
 
@@ -67,14 +72,13 @@ The bodies of test functions typically perform these three actions
 use std::fs;
 use std::fs::File;
 use std::io::ErrorKind; 
-
 use std::io::prelude::*;
 use std::collections::HashMap;
 use std::cmp::Ordering;
-
 use std::io;
 use rand; 
 use rand::Rng;
+
 // importing back_of_house module::AveragedCollection
 use guessing_game::back_of_house::AveragedCollection;
 
@@ -103,6 +107,7 @@ version six addresses are still fundamentally IP addresses, so they should be tr
 when the code  
 */
 
+
 enum SpreadsheetCell {
     Int(i32),
     Float(f64),
@@ -123,6 +128,7 @@ fn printLoop(value: &Vec<i32>) {
     }   
 }
 
+
 fn HashMapRelatedFunction(value: &mut HashMap<String, i32>) {
     /*
 
@@ -130,17 +136,20 @@ fn HashMapRelatedFunction(value: &mut HashMap<String, i32>) {
     -----------
     From the mutable hashmap, insert the <string, int> entry into the 
     hashmap with the function. 
-    
-    */
+
+     */
 
     value.insert(String::from("Blue"), 10);
     value.insert(String::from("Yellow"), 50);
-
+    
     // what other transformations do I wish to do with the hashmap?
 }
 
+
 // https://doc.rust-lang.org/book/ch10-01-syntax.html
+
 fn largest_i32(list: &[i32]) -> i32 {
+
     let mut largest = list[0]; // Take the first item in the mutable list 
 
     for &item in list { // loop over the list 
@@ -148,7 +157,7 @@ fn largest_i32(list: &[i32]) -> i32 {
             largest = item; // if the item is larger than the previously allocated largest value, then we allocate that value as the largest value 
         }
     }
-    largest // return largest 
+    return largest // return largest 
 }
 
 fn largest_char(list: &[char]) -> char {
@@ -159,9 +168,13 @@ fn largest_char(list: &[char]) -> char {
             largest = item;
         }
     }
-
-    largest
+    return largest
 }
+
+/*
+
+'a represents the generic type 
+*/
 
 pub struct LinesWithEndings<'a> {
     input: &'a str,
@@ -190,6 +203,34 @@ impl<'a> Iterator for LinesWithEndings<'a> {
     }
 }
 
+// 
+pub trait generateVec {
+    fn vectorize(&self) ->  Vec<Vec<f32>>; 
+}
+
+// trait with default return value implemented 
+pub trait Summary {
+    fn summarize(&self) -> String {
+	String::from("(Read more...)")
+    }
+}
+
+pub struct Coordinates {
+    pub X: f32,
+    pub Y: f32, 
+}
+    
+impl generateVec for Coordinates {
+    fn vectorize(&self) ->  Vec<Vec<f32>> {
+	let mut  vv : Vec<Vec<f32>> = Vec::new(); 
+	let mut v: Vec<f32> = Vec::new();
+	v.push(self.X);
+	v.push(self.Y);
+	vv.push(v);
+	vv
+    }    
+}
+
 fn main() {
     
     //panic!("crash and burn");
@@ -201,7 +242,17 @@ fn main() {
 	active: true,
 	sign_in_count: 1, 
     };
+
+    let CoordinatesXY = Coordinates {
+	X: 30.0,
+	Y: 20.0, 
+    };
+   
+    for i in &CoordinatesXY.vectorize() {
+	println!("{} {}", i[0], i[1]);
+    }
     
+    //println!("{}", CoordinatesXY.vectorize());
     /*
     You can create an empty hash map with new and add elements with insert.
     */
@@ -212,7 +263,6 @@ fn main() {
     for (key, value) in &scores {
         println!("{}: {}", key, value);
     }
-
     let mut v: Vec<i32> = Vec::new();
     // Adding elements to the vector 
     v.push(5);
@@ -220,7 +270,6 @@ fn main() {
     v.push(7);
     v.push(8);
     printLoop(&v);
-    v[99];
     
     let AveragedCollection1 = AveragedCollection {
 	list: v.clone(),
@@ -292,9 +341,9 @@ fn main() {
     // Working on the advent of code
     // Our task is to find the two entries that sum to 2020
     // read filename    
-    let filename = String::from("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt");
-    let filename2 = filename.clone();
 
+    let filename = String::from("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt");
+    let filename2 = filename.clone(); // 
     let f = File::open(filename2);    
     let f = match f {
 	Ok(file) => file,
@@ -311,19 +360,6 @@ fn main() {
     };
     let contents = include_str!("/home/sang/Desktop/GIT/RustLibraries/guessing_game/src/input.txt")
 	.split("\n");
-
-    /*
-    
-    This tells us the return type of the File::open function is a Result<T,E>. The generic parameter 
-    T has been filled in here with the type of the success value 
-
-    This return type means the call to File::open might succeed and return a file handle read from or write to.
-
-    The File::open function needs to have a way to tell us whether it succeeded or failed and 
-    at the same time give us either the file handle or error information
-    
-     */
-
     
     let contents2 = contents.clone();
     //println!("With text {}", contents);
@@ -335,6 +371,7 @@ fn main() {
     for entry in contents {
 	println!("{}", entry);
     }
+
     let row = vec![
 	SpreadsheetCell::Int(3),
 	SpreadsheetCell::Text(String::from("blue")),
