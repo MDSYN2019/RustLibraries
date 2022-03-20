@@ -4,7 +4,7 @@ Author: Sang Young Noh
 ----------------------
 
 ------------------------
-Last Updated: 13/03/2022
+Last Updated: 20/03/2022
 ------------------------
 
 Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
@@ -52,22 +52,7 @@ If File::open failed for any other reason - for example, because we didn't have 
 */
 
 
-/*
-
-How to write tests
-------------------
-
-Tests are Rust functions that verify that the non-test code is functioning in the expected manner. 
-The bodies of test functions typically perform these three actions 
-
-1. Set up any needed data or state.
-
-2. Run the code you want to test. 
-
-3. Assert the results are what you expect. 
-
-*/
-
+#![allow(unused_variables)]
 
 use std::fs;
 use std::fs::File;
@@ -76,8 +61,14 @@ use std::io::prelude::*;
 use std::collections::HashMap;
 use std::cmp::Ordering;
 use std::io;
+use std::time::{Duration, Instant};
+
 use rand; 
 use rand::Rng;
+
+
+use num::complex::Complex;
+
 
 // importing back_of_house module::AveragedCollection
 use guessing_game::back_of_house::AveragedCollection;
@@ -232,6 +223,17 @@ impl generateVec for Coordinates {
 }
 
 fn main() {
+
+    let needle = 42;
+    let haystack = [1, 1, 2, 5, 14, 42,
+		    132, 429, 1430, 4862];
+
+    for item in &haystack {
+	let result = match item {
+	    42 | 132 => "hit",
+	    _ => "miss", 
+	};	
+    }
     
     //panic!("crash and burn");
     // Using structs
