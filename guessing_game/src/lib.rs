@@ -12,6 +12,7 @@ Other crates that depend on the aggregator crate can also bring the Summary trai
 pub mod MandelBrot {
     
     use num::complex::Complex;
+    use core::mem::swap;
     
     pub fn MatchFunction(){
 
@@ -78,25 +79,27 @@ pub mod MandelBrot {
 		    400..=700 => '#',
 		    _ => '%', 
 		};
-
 		line.push(val);
-	    }
-	    
+	    }	    
 	    println!("{}", line);    
 	}
     }
 }
 
+// https://medium.com/analytics-vidhya/practical-introduction-to-hartree-fock-448fc64c107b
 
-pub mod Alias {
-    
+pub mod HartreeFock {
+    use num::complex::Complex;
+    use core::mem::swap;
+    use core::mem::take;
+
     // The struct itself is marked pub so that other code may use it,
     // but the fields within the struct remain private.
 
     // We want to ensure that whenever a value is added or removed from the list,
     // the average is also updated
 
-    pub struct AveragedCollection {
+    pub struct HFDataset {
 	pub list: Vec<i32>,
 	pub average: f32,
 	pub name: String, 
@@ -104,13 +107,18 @@ pub mod Alias {
     }
     
     // https://doc.rust-lang.org/book/ch10-01-syntax.html
-    impl AveragedCollection {
+    impl HFDataset {
 
-	pub fn largest_i32(list: &[i32]) -> i32 {
-	
-	    let mut largest = list[0]; // Take the first item in the mutable list 
-	
-	    for &item in list { // loop over the list 
+	/*
+	Find the largest element within the vector that is in the struct 
+	*/
+
+	pub fn largest_i32(&self) -> i32 {
+	    // https://stackoverflow.com/questions/63353762/cannot-move-out-of-which-is-behind-a-mutable-reference    
+	    let buf = self.list.clone();
+	    //swap(&mut buf, &self.list);
+	    let mut largest = buf[0]; // Take the first item in the mutable list
+	    for item in buf { // loop over the list 
 		if item > largest {
 		    largest = item; // if the item is larger than the previously allocated largest value, then we allocate that value as the largest value 
 		}
@@ -118,19 +126,6 @@ pub mod Alias {
 	    return largest // return largest 
 	}
 
-	
-	pub fn largest_char(list: &[char]) -> char {
-	    let mut largest = list[0];
-	    
-	    for &item in list {
-		if item > largest {
-		    largest = item;
-		}
-	    }
-	    return largest
-	}
-
-	
 	pub fn add(&mut self, value: i32) {
 	    self.list.push(value);
 	    self.update_average();
@@ -192,7 +187,7 @@ pub mod Alias {
 
 pub fn eat_at_restaurant() {
     // Order a breakfast in the summer with Rye toast
-    let mut meal = Alias::Breakfast::summer("Rye");
+    let mut meal = HartreeFock::Breakfast::summer("Rye");
     meal.toast = String::from("Wheat");
     println!("I'd like {} toast please", meal.toast);
 }

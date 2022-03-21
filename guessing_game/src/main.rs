@@ -42,11 +42,10 @@ use std::time::{Duration, Instant};
 use rand; 
 use rand::Rng;
 use num::complex::Complex;
-
+use core::mem::swap;
 use ndarray::array;
-
 // importing back_of_house module::AveragedCollection
-use guessing_game::Alias::AveragedCollection;
+use guessing_game::HartreeFock::HFDataset;
 
 // Struct definitions
 struct User {
@@ -96,45 +95,17 @@ fn printLoop(value: &Vec<i32>) {
 
 fn HashMapRelatedFunction(value: &mut HashMap<String, i32>) {
     /*
-
     Description
     -----------
     From the mutable hashmap, insert the <string, int> entry into the 
     hashmap with the function. 
-
      */
-
-    value.insert(String::from("Blue"), 10);
-    value.insert(String::from("Yellow"), 50);
     
+    value.insert(String::from("Blue"), 10);
+    value.insert(String::from("Yellow"), 50);    
     // what other transformations do I wish to do with the hashmap?
 }
 
-
-// https://doc.rust-lang.org/book/ch10-01-syntax.html
-
-fn largest_i32(list: &[i32]) -> i32 {
-
-    let mut largest = list[0]; // Take the first item in the mutable list 
-
-    for &item in list { // loop over the list 
-        if item > largest {
-            largest = item; // if the item is larger than the previously allocated largest value, then we allocate that value as the largest value 
-        }
-    }
-    return largest // return largest 
-}
-
-fn largest_char(list: &[char]) -> char {
-    let mut largest = list[0];
-
-    for &item in list {
-        if item > largest {
-            largest = item;
-        }
-    }
-    return largest
-}
 
 /*
 
@@ -198,7 +169,51 @@ impl generateVec for Coordinates {
 
 // -----
 
-type FILETYPE = String;
+//type FILETYPE = String;
+
+/*
+What methods are and described how to make use of them in Rust 
+*/
+
+// Read computational chemistry type work??
+
+
+#[derive(Debug)]
+struct FILETYPE {
+    name: String,
+    data: Vec<u8>,
+}
+
+impl FILETYPE {
+    /*
+    Description 
+    -----------
+     */
+
+    
+    fn new(name: &str) -> FILETYPE {
+	// Generate new FILETYPE with name, but empty vector 
+	FILETYPE {
+	    name: String::from(name),
+	    data: Vec::new(),
+	}
+    }
+
+    fn new_with_data(name: &str, data: &Vec<u8>) -> FILETYPE {
+	let mut f = FILETYPE::new(name);
+	f.data = data.clone();
+	f
+    }
+    
+    #[allow(dead_code)]
+    fn read(f: &mut FILETYPE, save_to: &mut Vec<u8>) -> usize {
+	let mut tmp = f.data.clone();
+	let read_length = tmp.len();
+	save_to.reserve(read_length); // Ensures that there is sufficient space to fit the incoming data 
+	save_to.append(&mut tmp);
+	read_length // return length of the data vector 
+    }
+}
 
 fn open(f: &mut FILETYPE) -> bool {
     true
@@ -208,15 +223,7 @@ fn close(f: &mut FILETYPE) -> bool {
     true 
 }
 
-#[allow(dead_code)]
-pub fn read(f: &mut FILETYPE, save_to: &mut Vec<u8>) -> ! {
-    unimplemented!()
-}
-    
-
-
 fn main() {
-
     let needle = 42;
     let haystack = [1, 1, 2, 5, 14, 42,
 		    132, 429, 1430, 4862];
@@ -266,9 +273,10 @@ fn main() {
     v.push(8);
     printLoop(&v);
     
-    let AveragedCollection1 = AveragedCollection {
+    let AveragedCollection1 = HFDataset {
 	list: v.clone(),
-	average: 0.0 
+	average: 0.0,
+	name: "Sang".to_string(),
     };
 
     let user1 = User {
