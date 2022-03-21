@@ -4,7 +4,7 @@ Author: Sang Young Noh
 ----------------------
 
 ------------------------
-Last Updated: 20/03/2022
+Last Updated: 21/03/2022
 ------------------------
 
 Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
@@ -14,43 +14,20 @@ Rosetta Stone code - http://rosettacode.org/wiki/Rosetta_Code
 
 - Rosetta stone tasks not implemented in rust - http://rosettacode.org/wiki/Reports:Tasks_not_implemented_in_Rust
 
-
 Useful Links:
 ------------
 
 -> https://fasterthanli.me/series/advent-of-code-2020/part-1 - advent of code 
-
 -> https://doc.rust-lang.org/book/ch12-02-reading-a-file.html
-
 -> https://stackoverflow.com/questions/40455997/iterate-over-lines-in-a-string-including-the-newline-characters
-
 -> https://doc.rust-lang.org/std/macro.include_str.html
-
 -> https://stackoverflow.com/questions/40455997/iterate-over-lines-in-a-string-including-the-newline-characters
-
 -> https://stevedonovan.github.io/rust-gentle-intro/object-orientation.html  - object orientation in Rust 
-
 -> https://os.phil-opp.com/ - building an OS in rust 
-
 -> https://doc.rust-lang.org/book/ch09-00-error-handling.html - error handling in rust 
-
 -> https://blog.logrocket.com/how-to-build-a-blockchain-in-rust/ - blockchain app in rust 
 
 */
-
-/*
-
-The code will panic! no matter why File::open failed. What we want to do instead is take different actions 
-for different actions for different failure reasons: 
-
-if File::open failed because the file doesn't exist, we want to create the file 
-and return the handle to the new file. 
-
-If File::open failed for any other reason - for example, because we didn't have permission to open the file 
-- we still want to code to panic! in the same way as it did. 
-
-*/
-
 
 #![allow(unused_variables)]
 
@@ -62,16 +39,14 @@ use std::collections::HashMap;
 use std::cmp::Ordering;
 use std::io;
 use std::time::{Duration, Instant};
-
 use rand; 
 use rand::Rng;
-
-
 use num::complex::Complex;
 
+use ndarray::array;
 
 // importing back_of_house module::AveragedCollection
-use guessing_game::back_of_house::AveragedCollection;
+use guessing_game::Alias::AveragedCollection;
 
 // Struct definitions
 struct User {
@@ -87,7 +62,6 @@ struct Rectangle {
 }
 
 // enum definitions
-
 /*
 Enums are a way of defining custom data types in a different way than you do with structs. Let's look 
 at a situation we might want to express in code. 
@@ -221,6 +195,25 @@ impl generateVec for Coordinates {
 	vv
     }    
 }
+
+// -----
+
+type FILETYPE = String;
+
+fn open(f: &mut FILETYPE) -> bool {
+    true
+}
+
+fn close(f: &mut FILETYPE) -> bool {
+    true 
+}
+
+#[allow(dead_code)]
+pub fn read(f: &mut FILETYPE, save_to: &mut Vec<u8>) -> ! {
+    unimplemented!()
+}
+    
+
 
 fn main() {
 

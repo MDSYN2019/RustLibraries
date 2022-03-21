@@ -1,9 +1,8 @@
 
-#![allow(unused_variables)]
 
 /*
 
-Last Updated: 20/03/2022
+Last Updated: 21/03/2022
 -------------------------
 
 Other crates that depend on the aggregator crate can also bring the Summary trait into scope to implement the trait on their own types.
@@ -11,7 +10,9 @@ Other crates that depend on the aggregator crate can also bring the Summary trai
 */
 
 pub mod MandelBrot {
+    
     use num::complex::Complex;
+    
     pub fn MatchFunction(){
 
     }
@@ -65,6 +66,7 @@ pub mod MandelBrot {
 	for row in escape_vals {
 	    let mut line = String::with_capacity(row.len());
 	    for column in row {
+
 		let val = match column { 
 		    0..=2 => ' ',
 		    2..=5 => '.',
@@ -79,28 +81,56 @@ pub mod MandelBrot {
 
 		line.push(val);
 	    }
+	    
 	    println!("{}", line);    
 	}
     }
 }
 
 
-pub mod back_of_house {
+pub mod Alias {
     
-    pub struct AveragedCollection {
-	pub list: Vec<i32>,
-	pub average: f32,
-	//pub filename: String, 
-    }
- 
     // The struct itself is marked pub so that other code may use it,
     // but the fields within the struct remain private.
 
     // We want to ensure that whenever a value is added or removed from the list,
     // the average is also updated
 
+    pub struct AveragedCollection {
+	pub list: Vec<i32>,
+	pub average: f32,
+	pub name: String, 
+	//pub filename: String, 
+    }
+    
+    // https://doc.rust-lang.org/book/ch10-01-syntax.html
     impl AveragedCollection {
 
+	pub fn largest_i32(list: &[i32]) -> i32 {
+	
+	    let mut largest = list[0]; // Take the first item in the mutable list 
+	
+	    for &item in list { // loop over the list 
+		if item > largest {
+		    largest = item; // if the item is larger than the previously allocated largest value, then we allocate that value as the largest value 
+		}
+	    }
+	    return largest // return largest 
+	}
+
+	
+	pub fn largest_char(list: &[char]) -> char {
+	    let mut largest = list[0];
+	    
+	    for &item in list {
+		if item > largest {
+		    largest = item;
+		}
+	    }
+	    return largest
+	}
+
+	
 	pub fn add(&mut self, value: i32) {
 	    self.list.push(value);
 	    self.update_average();
@@ -114,7 +144,7 @@ pub mod back_of_house {
 	    let total: i32 = self.list.iter().sum();
 	    self.average = total as f32 / self.list.len() as f32;
 	}
-    
+	
     }
     
     pub struct Breakfast {
@@ -162,7 +192,7 @@ pub mod back_of_house {
 
 pub fn eat_at_restaurant() {
     // Order a breakfast in the summer with Rye toast
-    let mut meal = back_of_house::Breakfast::summer("Rye");
+    let mut meal = Alias::Breakfast::summer("Rye");
     meal.toast = String::from("Wheat");
     println!("I'd like {} toast please", meal.toast);
 }
