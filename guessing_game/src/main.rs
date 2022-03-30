@@ -1,82 +1,75 @@
-/*
-----------------------
-Author: Sang Young Noh
-----------------------
-
-------------------------
-Last Updated: 21/03/2022
-------------------------
-
-Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
-their absence. 
-
-Rosetta Stone code - http://rosettacode.org/wiki/Rosetta_Code
-
-- Rosetta stone tasks not implemented in rust - http://rosettacode.org/wiki/Reports:Tasks_not_implemented_in_Rust
-
-Useful Links:
-------------
-
--> https://fasterthanli.me/series/advent-of-code-2020/part-1 - advent of code 
--> https://doc.rust-lang.org/book/ch12-02-reading-a-file.html
--> https://stackoverflow.com/questions/40455997/iterate-over-lines-in-a-string-including-the-newline-characters
--> https://doc.rust-lang.org/std/macro.include_str.html
--> https://stackoverflow.com/questions/40455997/iterate-over-lines-in-a-string-including-the-newline-characters
--> https://stevedonovan.github.io/rust-gentle-intro/object-orientation.html  - object orientation in Rust 
--> https://os.phil-opp.com/ - building an OS in rust 
--> https://doc.rust-lang.org/book/ch09-00-error-handling.html - error handling in rust 
--> https://blog.logrocket.com/how-to-build-a-blockchain-in-rust/ - blockchain app in rust 
-
-*/
+//!
+//! ----------------------
+//! Author: Sang Young Noh
+//! ----------------------
+//! 
+//! ------------------------
+//! Last Updated: 30/03/2022
+//! ------------------------
+//! 
+//! Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
+//! their absence. 
+//! 
+//! Rosetta Stone code - http://rosettacode.org/wiki/Rosetta_Code
+//! 
+//! - Rosetta stone tasks not implemented in rust - http://rosettacode.org/wiki/Reports:Tasks_not_implemented_in_Rust
+//! 
+//! Useful Links:
+//! ------------
+//! 
+//! -> https://fasterthanli.me/series/advent-of-code-2020/part-1 - advent of code 
+//! -> https://doc.rust-lang.org/book/ch12-02-reading-a-file.html
+//! -> https://stackoverflow.com/questions/40455997/iterate-over-lines-in-a-string-including-the-newline-characters
+//! -> https://doc.rust-lang.org/std/macro.include_str.html
+//! -> https://stackoverflow.com/questions/40455997/iterate-over-lines-in-a-string-including-the-newline-characters
+//! -> https://stevedonovan.github.io/rust-gentle-intro/object-orientation.html  - object orientation in Rust 
+//! -> https://os.phil-opp.com/ - building an OS in rust 
+//! -> https://doc.rust-lang.org/book/ch09-00-error-handling.html - error handling in rust 
+//! -> https://blog.logrocket.com/how-to-build-a-blockchain-in-rust/ - blockchain app in rust 
+//!
+//!
 
 #![allow(unused_variables)]
 
+//extern crate itertools;
+//extern crate itertools_num;
+
+// Using linspace 
+use itertools_num::linspace;
+
 use std::fs;
+use std::io;
 use std::fs::File;
 use std::io::ErrorKind; 
 use std::io::prelude::*;
 use std::collections::HashMap;
 use std::cmp::Ordering;
-use std::io;
 use std::time::{Duration, Instant};
+use std::error::Error;
+
+
 use rand; 
-use rand::Rng;
+use rand::prelude::*;
+use rand::{random, Rng};
 use num::complex::Complex;
 use core::mem::swap;
 use ndarray::array;
 // importing back_of_house module::AveragedCollection
-use guessing_game::HartreeFock::HFDataset;
 
-// Struct definitions
-struct User {
-    active: bool,
-    username: String,
-    email: String,
-    sign_in_count: u64,
-}
-
-struct Rectangle {
-    width: u32,
-    height: u32, 
-}
-
-// enum definitions
-/*
-Enums are a way of defining custom data types in a different way than you do with structs. Let's look 
-at a situation we might want to express in code. 
-
-Any ip address can be either a version four or version six address, but not both at the same time. That property
-of IP addresses makes the enum data structure appropriate, because an enum value can only be one of its variants. Both version four and 
-version six addresses are still fundamentally IP addresses, so they should be treated as the same type 
-when the code  
-*/
-
+use guessing_game::HartreeFock::HFDataset; // Hartree fock 
+use guessing_game::misc::User; // User 
 
 enum SpreadsheetCell {
     Int(i32),
     Float(f64),
-    Text(String),
-    
+    Text(String),    
+}
+
+enum Suit {
+    Clubs,
+    Spades,
+    Diamonds,
+    Hearts, 
 }
 
 struct IntegerAdder {
@@ -99,13 +92,12 @@ fn HashMapRelatedFunction(value: &mut HashMap<String, i32>) {
     -----------
     From the mutable hashmap, insert the <string, int> entry into the 
     hashmap with the function. 
-     */
-    
+     */    
     value.insert(String::from("Blue"), 10);
     value.insert(String::from("Yellow"), 50);    
     // what other transformations do I wish to do with the hashmap?
+    
 }
-
 
 /*
 
@@ -176,7 +168,38 @@ What methods are and described how to make use of them in Rust
 */
 
 // Read computational chemistry type work??
+static mut ERROR : isize = 0;
 
+//#[derive(Debug)]
+//fn one_in(n: u32) -> bool {
+//    rand::thread_rng().gen_weighted_bool(n)
+//}
+
+
+#[derive(Debug)]  // Allows the structure (whether it be enum/struct or whatever to be allowed to be printed out
+enum Event {
+    Update,
+    Delete,
+    Unknown,
+}
+
+type Message = String;
+
+fn parse_log(line: &'static str) -> (Event, Message) {
+    let parts: Vec<&str> = line.splitn(2, ' ').collect(); // collect consumes an iterator and returns Vec<T>
+    if parts.len() == 1 {
+	return (Event::Unknown, String::from(line))
+    }
+
+    let event = parts[0];
+    let rest = String::from(parts[1]);
+
+    match event {
+	"UPDATE" | "update" => (Event::Update, rest),
+	"DELETE" | "delete" => (Event::Delete, rest),
+	_ => (Event::Unknown, String::from(line)),
+    }
+}
 
 #[derive(Debug)]
 struct FILETYPE {
@@ -189,7 +212,6 @@ impl FILETYPE {
     Description 
     -----------
      */
-
     
     fn new(name: &str) -> FILETYPE {
 	// Generate new FILETYPE with name, but empty vector 
@@ -206,36 +228,78 @@ impl FILETYPE {
     }
     
     #[allow(dead_code)]
-    fn read(f: &mut FILETYPE, save_to: &mut Vec<u8>) -> usize {
+    fn read(f: &mut FILETYPE, save_to: &mut Vec<u8>) -> Result<usize, String> { // Result<T, E> -> T is an integer type usize, and E is string. Using Sting
 	let mut tmp = f.data.clone();
 	let read_length = tmp.len();
 	save_to.reserve(read_length); // Ensures that there is sufficient space to fit the incoming data 
 	save_to.append(&mut tmp);
-	read_length // return length of the data vector 
+	Ok(read_length) // return read length. Otherwise, return a string as we are returning a Result 
     }
+
+    #[allow(unused_variables)]
+    fn readErr(f: &FILETYPE, save_to: &mut Vec<u8>) -> usize {
+	if random() && random() && random() {
+	    unsafe {
+		ERROR = 1; 
+	    }
+	}
+	0
+    }
+
+    
 }
 
-fn open(f: &mut FILETYPE) -> bool {
-    true
+/*
+Two points were raised discussing dissatissfaction with being unable to 
+properly signify errors: 
+
+- There was no attempt at implementing read() 
+
+- open() and close() returns bools 
+
+*/
+
+fn one_in(denominator: u32) -> bool {      // <2>                                                                                                                                                         
+  thread_rng().gen_ratio(1, denominator)   // <3>                                                                                                                                                        
+}                                                                                                                                                                                                          
+
+fn open(f:  FILETYPE) -> Result<FILETYPE, String> {
+    if one_in(10_000) {
+	let err_msg = String::from("Permission denied");
+	return Err(err_msg);
+    }
+    Ok(f)	
 }
 
-fn close(f: &mut FILETYPE) -> bool {
-    true 
-}
+fn close(f: FILETYPE) -> Result<FILETYPE, String> {
+    if one_in(100_000) { // Once in 10000 executions, return an error 
+	let err_msg = String::from("Interrupted by signal!");
+	return Err(err_msg);
+    }
+    Ok(f)
+}    
+
 
 fn main() {
+
+    let mut LinspaceData = linspace::<f32>(0., 1., 5); 
+    for i in LinspaceData {
+	println!("{}", i);
+    }
+    
     let needle = 42;
     let haystack = [1, 1, 2, 5, 14, 42,
 		    132, 429, 1430, 4862];
 
     for item in &haystack {
+
 	let result = match item {
 	    42 | 132 => "hit",
 	    _ => "miss", 
 	};	
     }
     
-    //panic!("crash and burn");
+    // panic!("crash and burn");
     // Using structs
     // Hashmaps    
     let user1 = User {
@@ -245,6 +309,8 @@ fn main() {
 	sign_in_count: 1, 
     };
 
+    user1.printOutline();
+    
     let CoordinatesXY = Coordinates {
 	X: 30.0,
 	Y: 20.0, 
