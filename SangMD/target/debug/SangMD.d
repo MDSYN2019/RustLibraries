@@ -1,0 +1,1 @@
+/home/sang/Desktop/GIT/RustLibraries/SangMD/target/debug/SangMD: /home/sang/Desktop/GIT/RustLibraries/SangMD/src/input.txt /home/sang/Desktop/GIT/RustLibraries/SangMD/src/lib.rs /home/sang/Desktop/GIT/RustLibraries/SangMD/src/main.rs
