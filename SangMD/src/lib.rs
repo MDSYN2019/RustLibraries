@@ -2,7 +2,7 @@
 
 /*
 
-Last Updated:10/04/2022
+Last Updated: 11/04/2022
 -------------------------
 
 Other crates that depend on the aggregator crate can also bring the Summary trait into scope to implement the trait on their own types.
@@ -19,7 +19,19 @@ Other crates that depend on the aggregator crate can also bring the Summary trai
 //    #[test]
 //}
 
+pub mod CubSat {
+    /*
+    Create a modular implementation of the cubestats in queston 
+     */
+    #[derive(Debug)]
+    enum StatusMessage {
+	Ok,
+    }
+
     
+}
+
+
 pub mod misc {
 // Struct definitions                                                                                                                                                                                      
     pub struct User {                                                                                                                                                                                     

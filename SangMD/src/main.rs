@@ -4,7 +4,7 @@
 //! ----------------------
 //! 
 //! ------------------------
-//! Last Updated: 10/04/2022
+//! Last Updated: 11/04/2022
 //! ------------------------
 //! 
 //! Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing 
@@ -61,13 +61,18 @@ use SangMD::HartreeFock::HFDataset; // Hartree fock
 use SangMD::misc::User; // User 
 use SangMD::MandelBrot::*; // Random MandelBrot class 
 
+
+/*
+Define types
+*/
+
+
 fn printLoop(value: &Vec<i32>) {
-    let valueClone = value.clone();
+    let valueClone = value.clone(); // Why are we cloning the values here????
     for i in &valueClone {
 	println!("{} \n", i)
     }   
 }
-
 
 fn HashMapRelatedFunction(value: &mut HashMap<String, i32>) {
     /*
@@ -115,8 +120,6 @@ static mut ERROR : isize = 0;
 //    rand::thread_rng().gen_weighted_bool(n)
 //}
 
-
-type Message = String;
 
 fn parse_log(line: &'static str) -> (Event, Message) {
     let parts: Vec<&str> = line.splitn(2, ' ').collect(); // collect consumes an iterator and returns Vec<T>
@@ -170,13 +173,9 @@ impl FILETYPE {
 	    unsafe {
 		ERROR = 1; 
 	    }
-	}
-	
-	0 // if no error, return normal non-error status 
-	    
+	}	
+	0 // if no error, return normal non-error status    
     }
-
-    
 }
 
 /*
@@ -235,11 +234,10 @@ enum MessageNew {
     ChangeColor(i32, i32, i32),
 }
 
-
+#[derive(Debug)] // Forces the enum to be allowed to be printed in println! 
 enum StatusMessage {
 	Ok,
 }
-
 
 #[derive(Debug)]  // Allows the structure (whether it be enum/struct or whatever to be allowed to be printed out
 enum Event {
@@ -308,11 +306,34 @@ impl<'a> Iterator for LinesWithEndings<'a> {
    }
 }
 
+// Cubsat part 
+//fn check_status(sat_id: u64) -> StatusMessage {
+//    // Check the status of the satellite in question 
+//    StatusMessage::Ok
+//}
 
+type Message = String;
 
-fn check_status(sat_id: u64) -> StatusMessage {
-    StatusMessage::Ok
+struct GroundStation;
+
+#[derive(Debug)]
+struct CubeSat { // Defining a separate Cubesat type 
+    id: u64, // identifier for the specific Cubsat
+    mailbox: Mailbox,
 }
+
+#[derive(Debug)]
+struct Mailbox {
+    messages: Vec<Message>,
+}
+
+fn check_status(sat_id: CubeSat) -> CubeSat {
+    //StatusMessage::Ok // Return ok 
+    println!("{:?} {:?}", sat_id, StatusMessage::Ok);
+    sat_id // The ownership goes back to the original variable instead of being passed to sat_id
+	   // as we are returning the value 
+}
+
 
 fn main() {
 
@@ -324,25 +345,30 @@ fn main() {
 
      */
     
-    let sat_a = 0;
-    let sat_b = 0;
-    let sat_c = 0; 
+    // Indexing the Cubsat satellites, I think  
+    //let sat_a = 0;
+    //let sat_b = 1;
+    //let sat_c = 2;
 
-    let a_status = check_status(sat_a);
-    let b_status = check_status(sat_b);
-    let c_status = check_status(sat_c);
+    let sat_a = CubeSat { id: 0, mailbox: Mailbox{ messages : vec![] } };
+    let sat_b = CubeSat { id: 1, mailbox: Mailbox{ messages: vec![] } };
+    let sat_c = CubeSat { id: 2, mailbox: Mailbox{ messages: vec![] } };
+  
+    // Created the CubeSat structs with differing identifiers, then checking the status 
+    // Check the status of the satellites - At this current stage, we only print that the status is ok 
 
+    let sat_a = check_status(sat_a);
+    let sat_b = check_status(sat_b);
+    let sat_c = check_status(sat_c);
 
+   // println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
 
-
-
-
-
-
-
-
-
-
+    // waiting 
+    // Will produce an error with moved values
+    
+    let sat_a = check_status(sat_a);
+    let sat_b = check_status(sat_b);
+    let sat_c = check_status(sat_c);
     
     // Running a sample slow calculation
     let SampleSlowCalculation = simulated_expensive_calculation(3);
