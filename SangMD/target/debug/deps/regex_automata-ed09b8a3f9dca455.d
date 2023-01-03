@@ -1,0 +1,12 @@
+/home/sang/Desktop/git/RustLibraries/SangMD/target/debug/deps/regex_automata-ed09b8a3f9dca455.rmeta: /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/lib.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/byteorder.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/classes.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/dense.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/dfa.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/regex.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/sparse.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/state_id.rs
+
+/home/sang/Desktop/git/RustLibraries/SangMD/target/debug/deps/regex_automata-ed09b8a3f9dca455.d: /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/lib.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/byteorder.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/classes.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/dense.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/dfa.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/regex.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/sparse.rs /home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/state_id.rs
+
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/lib.rs:
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/byteorder.rs:
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/classes.rs:
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/dense.rs:
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/dfa.rs:
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/regex.rs:
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/sparse.rs:
+/home/sang/.cargo/registry/src/github.com-1ecc6299db9ec823/regex-automata-0.1.10/src/state_id.rs:
