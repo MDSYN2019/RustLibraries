@@ -28,6 +28,52 @@
 //! -> https://robert.kra.hn/posts/2021-02-07_rust-with-emacs/
 //!
 
+/*
+Rust's big features
+
+
+- Performance
+- Concurrency
+- Memrory Efficiency
+
+- Rust does not rely on a garbage collector to provide
+its memory safety
+
+The Rust community prefers to have a bigger language with a
+compiler that does more, rather than a simpler language where the
+compiler does less. The Rust compiler aggressively optimizes
+both the size and speed of your program.
+
+Cache-friendly data structures are provided by default. Arrays usually
+hold data within rust programs, rather than deeply nested tree structures
+that are created by pointers. This is referred to as data-orientated programming.
+
+Haing a modern package manager avaliable makes it very easy to benefit from
+the world's smartest programmers.
+
+Methods are always dispatched statically, unless dispatch is explicitly requested.
+This enables the compiler to heavilt optimize code, ometimes to to the point
+of eliminating the cost of the function call entirely.
+
+(dispatching means the act of sending something somewhere. There are two forms
+of dispatch, static and dynamic. The former means that a call to a method
+is resolved at compile time, and the latter means that the the dispatch is resolved
+at run time.
+
+When you have a variable of a base class that points to an instance of a derived class,
+and you call a method that the child overrides, the call will be dispatvhed to the child.
+
+Dynamic dispatch is the mechanism that allows polymorphic operations. Together with the this
+pointer, these are the tools that were built on top of the structured languages to create the
+object orientated languages.
+)
+
+Fearless concurrency - Concurrent and parallel programming has always been seen as difficult.
+Rust frees you from whole classes of errors that have plagued its peer languages.
+
+
+*/
+
 #![allow(unused_variables)]
 
 //extern crate itertools;
@@ -50,8 +96,9 @@ use std::time::{Duration, Instant};
 
 use core::mem::swap;
 use ndarray::array;
+
+// using complex number types
 use num::complex::Complex;
-use rand;
 use rand::prelude::*;
 use rand::{random, Rng}; //
 
@@ -62,7 +109,24 @@ use SangMD::MandelBrot::*; // Random MandelBrot class
 
 /*
 Define types
+
+when you want to re-use container later in the program, use a reference. For reaosn that
+are explained, when a reference is omitted, Rust will assume that container is no longer needed.
 */
+
+fn print_loop(value: &Vec<i32>) {
+    /*
+
+    The ampersand around Vec ensures that we are working
+    with a reference to a vector.
+
+    */
+
+    let value_clone = value.clone();
+    for index in &value_clone {
+        println!("{} \n", index)
+    }
+}
 
 fn printLoop(value: &Vec<i32>) {
     let valueClone = value.clone(); // Why are we cloning the values here????
@@ -140,49 +204,6 @@ fn parse_log(line: &'static str) -> (Event, Message) {
     }
 }
 
-impl FILETYPE {
-    /*
-
-    A file interface able to read in a generic molecular mechanics or a force field file
-    for crunching numbers with this rust program.
-
-     */
-
-    fn new(name: &str) -> FILETYPE {
-        // Generate new FILETYPE with name, but empty vector
-        FILETYPE {
-            name: String::from(name),
-            data: Vec::new(),
-        }
-    }
-
-    fn new_with_data(name: &str, data: &Vec<u8>) -> FILETYPE {
-        let mut f = FILETYPE::new(name);
-        f.data = data.clone();
-        f
-    }
-
-    #[allow(dead_code)]
-    fn read(f: &mut FILETYPE, save_to: &mut Vec<u8>) -> Result<usize, String> {
-        // Result<T, E> -> T is an integer type usize, and E is string. Using Sting
-        let mut tmp = f.data.clone();
-        let read_length = tmp.len();
-        save_to.reserve(read_length); // Ensures that there is sufficient space to fit the incoming data
-        save_to.append(&mut tmp);
-        Ok(read_length) // return read length. Otherwise, return a string as we are returning a Result
-    }
-
-    #[allow(unused_variables)]
-    fn readErr(f: &FILETYPE, save_to: &mut Vec<u8>) -> usize {
-        if random() && random() && random() {
-            unsafe {
-                ERROR = 1;
-            }
-        }
-        0 // if no error, return normal non-error status
-    }
-}
-
 /*
 Two points were raised discussing dissatissfaction with being unable to
 properly signify errors:
@@ -193,55 +214,12 @@ properly signify errors:
 
 */
 
-fn one_in(denominator: u32) -> bool {
-    // <2>
-    thread_rng().gen_ratio(1, denominator) // <3>
-}
-
-fn open(f: FILETYPE) -> Result<FILETYPE, String> {
-    if one_in(10_000) {
-        let err_msg = String::from("Permission denied");
-        return Err(err_msg);
-    }
-    Ok(f)
-}
-
-fn close(f: FILETYPE) -> Result<FILETYPE, String> {
-    if one_in(100_000) {
-        // Once in 10000 executions, return an error
-        let err_msg = String::from("Interrupted by signal!");
-        return Err(err_msg);
-    }
-    Ok(f)
-}
-
 // Arrange all enums here
 
 enum SpreadsheetCell {
     Int(i32),
     Float(f64),
     Text(String),
-}
-
-enum Suit {
-    Clubs,
-    Spades,
-    Diamonds,
-    Hearts,
-}
-
-enum MessageNew {
-    // Enum message can only take and get assigned these values.
-    // Still not entirely certain what advantage this brings
-    Quit,
-    MoveInt { x: i64, y: i64 },
-    Write(String),
-    ChangeColor(i32, i32, i32),
-}
-
-#[derive(Debug)] // Forces the enum to be allowed to be printed in println!
-enum StatusMessage {
-    Ok,
 }
 
 #[derive(Debug)] // Allows the structure (whether it be enum/struct or whatever to be allowed to be printed out
@@ -253,32 +231,10 @@ enum Event {
 
 // Arrange all structs here
 
-#[derive(Debug)]
-struct FILETYPE {
-    name: String,
-    data: Vec<u8>,
-}
-
 struct IntegerAdder {
     kind: SpreadsheetCell,
     address: String,
     numlist: Vec<i32>,
-}
-
-pub struct Coordinates {
-    pub X: f32,
-    pub Y: f32,
-}
-
-impl generateVec for Coordinates {
-    fn vectorize(&self) -> Vec<Vec<f32>> {
-        let mut vv: Vec<Vec<f32>> = Vec::new();
-        let mut v: Vec<f32> = Vec::new();
-        v.push(self.X);
-        v.push(self.Y);
-        vv.push(v);
-        vv
-    }
 }
 
 pub struct LinesWithEndings<'a> {
@@ -311,33 +267,114 @@ impl<'a> Iterator for LinesWithEndings<'a> {
     }
 }
 
-// Cubsat part
-//fn check_status(sat_id: u64) -> StatusMessage {
-//    // Check the status of the satellite in question
-//    StatusMessage::Ok
-//}
+/*
+- Discovering what the term 'lifetime' means in the context of rust programming
+- Working with the borrow checker rather than against it
+- Multiple tactics for dealing with issues when they crop up
+- understanding what the responsibilities of an 'owner' are
+- learning how to 'borrow' values that are owned elsewhere
+
+The borrow checker - checks that all access to data is 'legal'.
+
+Learning to work with the borrow checker allows you to build larger
+software systems with confidence. It underpins the term 'fearless concurrency'.
+
+Example of simulating a satellite constellation. - ..?
+
+
+Cubesats are minature artificial satellites that have increasingly increased the
+acessibility of space research compared to conventiaonal satellite
+
+A ground station is an intermediary between the operator and the satellites themselves. It
+is listening on the radio, checking on the status of every satellite in the constellation
+and transmitting messages to and fro. When introduced in our code, it will act as the gateway
+between the user and satellites.
+
+
+
+*/
 
 type Message = String;
-
 struct GroundStation;
 
+/*
+The derive attribute automatically creates the implementation
+required to make this struct printable with fmt::debug
+*/
 #[derive(Debug)]
 struct CubeSat {
-    // Defining a separate Cubesat type
-    id: u64, // identifier for the specific Cubsat
-    mailbox: Mailbox,
+    id: u64,
 }
 
-#[derive(Debug)]
 struct Mailbox {
     messages: Vec<Message>,
 }
 
-fn check_status(sat_id: CubeSat) -> CubeSat {
-    //StatusMessage::Ok // Return ok
-    println!("{:?} {:?}", sat_id, StatusMessage::Ok);
-    sat_id // The ownership goes back to the original variable instead of being passed to sat_id
-           // as we are returning the value
+fn check_status(sat_id: CubeSat) -> StatusMessage {
+    StatusMessage::Ok // Return ok
+}
+
+fn satellite_function() {
+    // create a variable for each of them.
+
+    let sat_a = CubeSat { id: 0 }; // ownership of the id 0 is within the cubesat object
+    let sat_b = CubeSat { id: 1 };
+    let sat_c = CubeSat { id: 2 };
+
+    //let a_status = check_status(a);
+    //let b_status = check_status(b);
+    //let c_status = check_statuc(c);
+
+    let a_status = check_status(sat_a); // ownership changes from cubesat to check_status?
+    let b_status = check_status(sat_b);
+    let c_status = check_status(sat_c);
+
+    let a_status = check_status(sat_a); // ownership has already moved from cubsat, so this cubesat object can no longer claim access to the new variable
+
+    /*
+
+    Every value in Rust is owned. In the listings, sat_a, sat_b and sat_c
+    own the data that they refer to. When calls to check_status() are made,
+    ownership of the data moves from variables in the scope of main()
+    to the sat_id variable within the function. The significant difference is
+    that the second examples places that integer within a cubesat struct. This type
+    change alters the semantics of how the program behaves.
+
+    ---
+
+    Special behaviour of primitive types
+
+    Before carrying on, it may be wise to explain why the first code even compiled in
+    the first place. Indeed, the only change that we make was to wrap out satellite
+    variable in a custom type. As it happens, primitive types in Rust have special
+    behaviour.
+
+    Types implementing Copy are duplicated at times that would otherwise be illegal.
+    This provides some convenience day-to-day, at the expensve of adding a trap to newcomers.
+    As you grow out from toy programming using integers, your code suddenly breaks.
+
+    ! formally, primitive types are said to possess copy semantics.
+
+    --
+
+    In the world of rust, the notion of ownership is rather limited; An owner cleans up
+    when its value's lifetime ends.
+
+    When values go out of scope or their lifetimes end for some other reason,
+    their desctructors are called. A desctructor is a function that remoes traces
+    of the value from the program by deleting references and freeing memory. You won't find
+    a call to any destructors in most rust code; the compiler injects that code itself as apart of the process of tracking every value's lifetime .
+
+
+    To provide a custom destructor for a type, implement Drop. This will typically be needed
+    in cases where you have used unsafe blocks to allocate memory. Drop has one method, Drop.
+
+    ! An implication of this system is that values may not outlive their owner. This kind
+    of situation can make data structures built with references such as trees and graphs, feel lsightly buearoucratic. If the root node of a tree is the owner of the whole tree, it can't be removed without taking ownership into account.
+
+
+
+     */
 }
 
 fn main() {
@@ -490,9 +527,13 @@ fn main() {
     // Our task is to find the two entries that sum to 2020
     // read filename
 
-    let filename = String::from("/home/sang/Desktop/GIT/RustLibraries/SangMD/src/input.txt");
-    let filename2 = filename.clone(); //
-    let f = File::open(filename2);
+    fn read_file(file_name: &str) -> File {
+        let filename = String::from(file_name);
+        let f = File::open(filename);
+    }
+    // for the operation of opening the file, if the file opens correctly,
+    // then we simply return the file. Otherwise, we define the error we
+    // wish the compiler to spit out.
     let f = match f {
         Ok(file) => file,
         Err(error) => match error.kind() {
