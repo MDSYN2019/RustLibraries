@@ -1,10 +1,9 @@
 /*
 
-Last Updated: 11/04/2022
+Last Updated: 12/02/2023
 -------------------------
 
 Other crates that depend on the aggregator crate can also bring the Summary trait into scope to implement the trait on their own types.
-
 */
 
 //extern crate itertools;
@@ -19,6 +18,23 @@ Other crates that depend on the aggregator crate can also bring the Summary trai
 
 pub mod molecular_structures {
 
+    // Why do we have imports within the public mods?
+    use core::mem::swap;
+    use num::complex::Complex;
+    use rand;
+    use rand::prelude::*;
+    use rand::{random, Rng};
+    use std::cmp::Ordering;
+    use std::io;
+    use std::io::prelude::*;
+    use std::io::ErrorKind;
+    use std::thread;
+    use std::time::Duration;
+
+    pub trait generateVec {
+        fn vectorize(&self) -> Vec<Vec<f32>>;
+    }
+
     #[derive(Debug)]
     pub struct FILETYPE {
         name: String,
@@ -27,11 +43,13 @@ pub mod molecular_structures {
 
     impl FILETYPE {
         /*
-        A file interface able to read in a generic molecular mechanics or a force field file
-        for crunching numbers with this rust program.
+        A file interface abel to read a generic molecule mechanics or a force field file for
+        crunching numbers with this rust program
+
          */
 
         fn new(name: &str) -> FILETYPE {
+            // generate filetype
             // Generate new FILETYPE with name, but empty vector
             FILETYPE {
                 name: String::from(name),
@@ -40,9 +58,9 @@ pub mod molecular_structures {
         }
 
         fn new_with_data(name: &str, data: &Vec<u8>) -> FILETYPE {
-            let mut f = FILETYPE::new(name);
+            let mut f = FILETYPE::new(name); // generate FILETYPE struct with the string name
             f.data = data.clone();
-            f
+            f // return f, which is a FILETYPE struct
         }
 
         #[allow(dead_code)]
@@ -55,21 +73,22 @@ pub mod molecular_structures {
             Ok(read_length) // return read length. Otherwise, return a string as we are returning a Result
         }
 
-        #[allow(unused_variables)]
-        fn readErr(f: &FILETYPE, save_to: &mut Vec<u8>) -> usize {
-            if random() && random() && random() {
-                unsafe {
-                    ERROR = 1;
-                }
-            }
-            0 // if no error, return normal non-error status
-        }
+        //#[allow(unused_variables)]
+        //fn readErr(f: &FILETYPE, save_to: &mut Vec<u8>) -> usize {
+        //    // Take the variable of a pointer to a FILETYPE and a mutable vector of unsigned 8 byte integers
+        //    if random() && random() && random() {
+        //        unsafe {
+        //            ERROR = 1;
+        //        }
+        //    }
+        //    0 // if no error, return normal non-error status
+        //}
     }
 
     // functions within the mods
 
     fn one_in(denominator: u32) -> bool {
-        thread_rng().gen_ratio(1, denominator) // <3>
+        thread_rng().gen_ratio(1, denominator)
     }
 
     fn open(f: FILETYPE) -> Result<FILETYPE, String> {
@@ -107,7 +126,7 @@ pub mod molecular_structures {
 
             inner_vector.push(self.X);
             inner_vector.push(self.Y);
-            vector_of_vectors.push(v);
+            //vector_of_vectors.push(v); // dont have v at the moment - dont know where this is for now ..
             vector_of_vectors
         }
     }
@@ -291,12 +310,10 @@ pub mod MandelBrot {
 // https://medium.com/analytics-vidhya/practical-introduction-to-hartree-fock-448fc64c107b
 
 pub mod HartreeFock {
+
     /*
-
-
     https://nznano.blogspot.com/2018/03/simple-quantum-chemistry-hartree-fock.html
-
-     */
+    */
 
     use core::mem::swap;
     use core::mem::take;
@@ -362,7 +379,7 @@ pub mod HartreeFock {
                 // is even or odd, we will push a different categorical
                 // string
 
-                if (item % 2 == 0) {
+                if item % 2 == 0 {
                     vecString.push("Even".to_string());
                 } else {
                     vecString.push("Odd".to_string());
@@ -452,4 +469,15 @@ pub fn eat_at_restaurant() {
     let mut meal = HartreeFock::Breakfast::summer("Rye");
     meal.toast = String::from("Wheat");
     println!("I'd like {} toast please", meal.toast);
+}
+
+// unit testing
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+// This is a really bad adding function, its purpose is to fail in this example
+#[allow(dead_code)]
+fn bad_add(a: i32, b: i32) -> i32 {
+    a - b
 }

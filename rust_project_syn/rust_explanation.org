@@ -1,0 +1,60 @@
+* Cargo is the recommended tool for building and running rust dependencies
+
+
+Learn how to construct rust pointers, how to interact with an operating system via its native API and how to interact
+with other programs through Rust's foreign function interface. 
+
+* Rust's big features
+
+- Performance
+- Concurrency
+- Memrory Efficiency
+
+- Rust does not rely on a garbage collector to provide
+its memory safety
+
+The Rust community prefers to have a bigger language with a
+compiler that does more, rather than a simpler language where the
+compiler does less. The Rust compiler aggressively optimizes
+both the size and speed of your program.
+
+
+
+Cache-friendly data structures are provided by default. Arrays usually
+hold data within rust programs, rather than deeply nested tree structures
+that are created by pointers. This is referred to as data-orientated programming.
+
+Having a modern package manager avaliable makes it very easy to benefir
+from the world's smartest programmers.
+
+Methods are always dispatched statically, unless dispatch is explicityl requested.
+This enables the compiler to heavily optimzie code, sometimes to the point of
+eliminating the cost of the function call entirely. - (dispatching means the act of sending something somewhere. There are two forms
+of dispatch, static and dynamic. The former means that a call to a method
+is resolved at compile time, and the latter means that the the dispatch is resolved
+at run time.
+
+When you have a variable of a base class that points to an instance of a derived class,
+and you call a method that the child overrides, the call will be dispatvhed to the child.
+
+Dynamic dispatch is the mechanism that allows polymorphic operations. Together with the this
+pointer, these are the tools that were built on top of the structured languages to create the
+object orientated languages.
+)
+
+Fearless concurrency - Concurrent and parallel programming has always been seen as difficult.
+Rust frees you from whole classes of errors that have plagued its peer languages.
+
+* Cargo
+
+Running the cargo command alomst supercedes the rustc command - it will compile the dependencies
+and compile them for you. 
+
+* Pointers
+
+Imagine reading a table of contents that says chapter 4 starts on page 97, but it actually
+it starts on page 107.
+
+We can think of data stored within the program's memory as scattered around within physical
+RAM somewhere. To make use of that RAM, there needs to be some sort of retrieval system in place.
+An address space is that retrieval system. 
